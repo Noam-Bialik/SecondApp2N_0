@@ -3,15 +3,16 @@ package com.example.secondapp2n_0.Data;
 import com.example.secondapp2n_0.Entities.Parcel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface IParcelsDateSource  {
 
-    ArrayList<Parcel> parcels = null;
+
     /*
      * A - own the parcel
      * B - delivery person
      * */
-//dfgjjgjfgjkgdfkg
+
     //1 The parcels of A that not Arrived
     ArrayList<Parcel> getAllParcelsThatNotArrived(String userName) throws Exception;
 
@@ -26,4 +27,26 @@ public interface IParcelsDateSource  {
 
     //5 B announced that he want to take the parcel
     boolean showMeAsDeliveryForTheParcel(Parcel parcel,String userName)throws Exception;
+
+    void notifyToOwner(final OwnerCallBacks callBacks );
+    void notifyToDelivery(final DeliveryCallBacks callBacks );
+
+    //listeners
+    public interface OwnerCallBacks{
+        void parcelAdded(Parcel parcel);
+        void parcelRemoved(Parcel parcel);
+        void parcelChanged(Parcel parcel);
+    }
+    //listeners
+    public interface DeliveryCallBacks{
+        void parcelAdded(Parcel parcel);
+        void parcelRemoved(Parcel parcel);
+        void parcelChanged(Parcel parcel);
+    }
+
+    /*
+       update parcel to DataBase
+        */
+    boolean updateParcel(Parcel parcel);
+
 }
