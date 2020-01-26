@@ -5,6 +5,8 @@ import com.example.secondapp2n_0.Entities.Parcel;
 import java.util.ArrayList;
 
 public interface IParcelsDateSource  {
+
+    ArrayList<Parcel> parcels = null;
     /*
      * A - own the parcel
      * B - delivery person

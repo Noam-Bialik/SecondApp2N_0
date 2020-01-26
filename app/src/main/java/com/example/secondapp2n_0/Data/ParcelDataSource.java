@@ -10,9 +10,22 @@ import java.util.ArrayList;
 
 public class ParcelDataSource implements IParcelsDateSource {
 
-
-    ArrayList<Parcel> parcels;
     private DatabaseReference parcelsRef = FirebaseDatabase.getInstance().getReference("Parcels");
+    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference("exex");
+
+
+    private static ParcelDataSource instance = null;
+    private ParcelDataSource(){
+        reference.setValue("hi firebase,ParcelDataSource works ");
+    }
+    public static IParcelsDateSource getInstance(){
+        if(instance == null)
+            instance = new ParcelDataSource();
+        return instance;
+    }
+
+
+
 
     @Override
     public ArrayList<Parcel> getAllParcelsThatNotArrived(String userName) throws Exception {
