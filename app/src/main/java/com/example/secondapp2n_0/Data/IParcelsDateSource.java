@@ -28,8 +28,10 @@ public interface IParcelsDateSource  {
     //5 B announced that he want to take the parcel
     boolean showMeAsDeliveryForTheParcel(Parcel parcel,String userName)throws Exception;
 
-    void notifyToOwner(final OwnerCallBacks callBacks );
-    void notifyToDelivery(final DeliveryCallBacks callBacks );
+
+    //we use:
+    void notifyToOwner(String userName,final OwnerCallBacks callBacks );
+    void notifyToDelivery(double radius,final DeliveryCallBacks callBacks );
 
     //listeners
     public interface OwnerCallBacks{
@@ -47,6 +49,6 @@ public interface IParcelsDateSource  {
     /*
        update parcel to DataBase
         */
-    boolean updateParcel(Parcel parcel);
+    boolean updateParcel(Parcel parcel) throws Exception;
 
 }

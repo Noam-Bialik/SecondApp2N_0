@@ -31,25 +31,35 @@ public class ParcelDataSource implements IParcelsDateSource {
     public ArrayList<Parcel> getAllParcelsThatNotArrived(String userName) throws Exception {
         return null;
     }
-
     @Override
     public boolean setConfirmation(Parcel parcel) throws Exception {
         return false;
     }
-
     @Override
     public boolean setParcelArrived(Parcel parcel) throws Exception {
-        parcelsRef.setValue("setParcelArrived");
         return false;
     }
-
     @Override
     public ArrayList<Parcel> getAllParcelsAvailableInRadius(double radius) throws Exception {
         return null;
     }
-
     @Override
     public boolean showMeAsDeliveryForTheParcel(Parcel parcel, String userName) throws Exception {
+        return false;
+    }
+
+    @Override
+    public void notifyToOwner(String userName,OwnerCallBacks callBacks) {
+
+    }
+
+    @Override
+    public void notifyToDelivery(double radius,DeliveryCallBacks callBacks) {
+
+    }
+
+    @Override
+    public boolean updateParcel(Parcel parcel) throws Exception {
         return false;
     }
 }
