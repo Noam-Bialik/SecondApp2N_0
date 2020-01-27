@@ -70,7 +70,7 @@ public class RegisteredParcelsFragment extends Fragment {
         });
         return root;
     }
-    public void onParcelClick(Parcel parcel)
+    public void onParcelClick(final Parcel parcel)
     {
         Calendar cal = Calendar.getInstance();
         AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
@@ -90,12 +90,13 @@ public class RegisteredParcelsFragment extends Fragment {
                 "\nTophoneNumber: "+parcel.getToPhoneNumber()+
                 "\nDeliverName: "+parcel.getDeliverName();
         alertDialog.setMessage(str);
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "YES", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+                Parcel parcel1=parcel;
+
             }
         });
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "NO", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }

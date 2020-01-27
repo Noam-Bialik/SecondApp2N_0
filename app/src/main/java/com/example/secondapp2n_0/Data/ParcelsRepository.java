@@ -31,7 +31,41 @@ public class ParcelsRepository implements IParcelsRepository {
     private ParcelsRepository(){
         parcelsDateSource=ParcelDataSource.getInstance();
 
-        parcelsDateSource.notifyToDelivery(Radius,new DeliveryCallBacks() {
+        parcelsDateSource.notifyToRepository(userName,Radius,new OwnerCallBacks()
+        {
+            @Override
+            public void parcelAdded(Parcel parcel) {
+                ArrayList<Parcel> list = ownerParcels.getValue();
+                if(list == null)
+                    list = new ArrayList<>();
+                ownerParcels.setValue(list);
+            }
+
+            @Override
+            public void parcelRemoved(Parcel parcel) {
+                ArrayList<Parcel> list = ownerParcels.getValue();
+                if(list == null)
+                    list = new ArrayList<>();
+                else list.remove(parcel);
+                ownerParcels.setValue(list);
+            }
+
+            @Override
+            public void parcelChanged(Parcel parcel) {
+                ArrayList<Parcel> list = ownerParcels.getValue();
+                if(list == null)
+                    list = new ArrayList<>();
+                else {
+                    for(Parcel parcel1: list)
+                    {
+                        if (parcel1.getID()==parcel.getID())
+                            list.remove(parcel);
+                        list.add(parcel1);
+                    }
+                }
+                ownerParcels.setValue(list);
+            }
+            },new DeliveryCallBacks() {
             @Override
             public void parcelAdded(Parcel parcel) {
                 ArrayList<Parcel> list = deliveryParcels.getValue();
@@ -63,40 +97,6 @@ public class ParcelsRepository implements IParcelsRepository {
                     }
                 }
                 deliveryParcels.setValue(list);
-            }
-        });
-        parcelsDateSource.notifyToOwner(userName, new OwnerCallBacks() {
-            @Override
-            public void parcelAdded(Parcel parcel) {
-                ArrayList<Parcel> list = ownerParcels.getValue();
-                if(list == null)
-                    list = new ArrayList<>();
-                ownerParcels.setValue(list);
-            }
-
-            @Override
-            public void parcelRemoved(Parcel parcel) {
-                ArrayList<Parcel> list = ownerParcels.getValue();
-                if(list == null)
-                    list = new ArrayList<>();
-                else list.remove(parcel);
-                ownerParcels.setValue(list);
-            }
-
-            @Override
-            public void parcelChanged(Parcel parcel) {
-                ArrayList<Parcel> list = ownerParcels.getValue();
-                if(list == null)
-                    list = new ArrayList<>();
-                else {
-                    for(Parcel parcel1: list)
-                    {
-                        if (parcel1.getID()==parcel.getID())
-                            list.remove(parcel);
-                            list.add(parcel1);
-                    }
-                }
-                ownerParcels.setValue(list);
             }
         });
     }
