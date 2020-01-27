@@ -75,7 +75,6 @@ public class RegisteredParcelsFragment extends Fragment {
         Calendar cal = Calendar.getInstance();
         AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
         alertDialog.setTitle("you want to take the parcel?");
-        alertDialog.setButton();
         String str="ID: "+parcel.getID() +
                 "\nWarehouseID: "+parcel.getWarehouseID()+
                 "\nWarehouseLocation: "+parcel.getWarehouseLocation()+
@@ -91,6 +90,11 @@ public class RegisteredParcelsFragment extends Fragment {
                 "\nTophoneNumber: "+parcel.getToPhoneNumber()+
                 "\nDeliverName: "+parcel.getDeliverName();
         alertDialog.setMessage(str);
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
