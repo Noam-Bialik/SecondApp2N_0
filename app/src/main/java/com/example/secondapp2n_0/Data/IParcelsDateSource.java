@@ -30,8 +30,8 @@ public interface IParcelsDateSource  {
 
 
     //we use:
-    void notifyToOwner(String userName,final OwnerCallBacks callBacks );
-    void notifyToDelivery(double radius,final DeliveryCallBacks callBacks );
+    void notifyToRepository(String userName,double radius,final OwnerCallBacks OwnerCallBacks ,final DeliveryCallBacks DeliveryCallBacks);
+
 
     //listeners
     public interface OwnerCallBacks{

@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.secondapp2n_0.Entities.FireParcel;
 import com.example.secondapp2n_0.Entities.Parcel;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -14,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 
 public class ParcelDataSource implements IParcelsDateSource {
+
 
     private DatabaseReference parcelsRef = FirebaseDatabase.getInstance().getReference("Parcels");
     private DatabaseReference reference = FirebaseDatabase.getInstance().getReference("exex");
@@ -54,41 +57,36 @@ public class ParcelDataSource implements IParcelsDateSource {
     }
 
     @Override
-    public void notifyToOwner(String userName,OwnerCallBacks callBacks) {
-
-    }
-
-    @Override
-    public void notifyToDelivery(double radius,DeliveryCallBacks callBacks) {
-
-    }
-
-    @Override
-    public boolean updateParcel(Parcel parcel) throws Exception {
-        try{
-
-            return true;
-        }
-        catch(Exception e){
-            throw new Exception(e.getMessage()+"+ ERROR_IN_UPDATEPARCEL");
-        }
-    }
-
-    private void connectToFirebase(){
+    public void notifyToRepository(final String userName, final double radius, final OwnerCallBacks OwnerCallBacks, final DeliveryCallBacks DeliveryCallBacks) {
         parcelsRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+                FireParcel fireParcel = dataSnapshot.getValue(FireParcel.class);
+                Parcel parcel = new Parcel(fireParcel);
+                if(matchToOwner(userName,parcel))
+                    OwnerCallBacks.parcelAdded(parcel);
+                if(matchToDelivery(radius,parcel))
+                    DeliveryCallBacks.parcelAdded(parcel);
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+                FireParcel fireParcel = dataSnapshot.getValue(FireParcel.class);
+                Parcel parcel = new Parcel(fireParcel);
+                if(matchToOwner(userName,parcel))
+                    OwnerCallBacks.parcelChanged(parcel);
+                if(matchToDelivery(radius,parcel))
+                    DeliveryCallBacks.parcelChanged(parcel);
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
+                FireParcel fireParcel = dataSnapshot.getValue(FireParcel.class);
+                Parcel parcel = new Parcel(fireParcel);
+                if(matchToOwner(userName,parcel))
+                    OwnerCallBacks.parcelRemoved(parcel);
+                if(matchToDelivery(radius,parcel))
+                    DeliveryCallBacks.parcelRemoved(parcel);
             }
 
             @Override
@@ -98,17 +96,34 @@ public class ParcelDataSource implements IParcelsDateSource {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
-    private void sendAddedToOwnerOrDelivery(Parcel parcel){
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    private boolean matchToDelivery(double radius, Parcel parcel) {
+        return true;
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
-    private void sendRemovedToOwnerOrDelivery(Parcel parcel){
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    private boolean matchToOwner(String userName, Parcel parcel) {
+        if(userName == parcel.getToName())
+            return true;
+        return false;
     }
-    private void sendChangedToOwnerOrDelivery(Parcel parcel){
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+    @Override
+    public boolean updateParcel(Parcel parcel) throws Exception {
+        try{
+            parcelsRef.child(String.valueOf(parcel.getID())).setValue(new FireParcel(parcel));
+            return true;
+        }
+        catch(Exception e){
+            throw new Exception(e.getMessage()+"+ ERROR_IN_UPDATEPARCEL");
+        }
     }
+
+
+
+
 }
