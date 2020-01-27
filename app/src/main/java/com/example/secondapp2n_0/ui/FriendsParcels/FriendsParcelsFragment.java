@@ -14,14 +14,19 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.secondapp2n_0.Data.IParcelsDateSource;
+import com.example.secondapp2n_0.Data.IParcelsRepository;
 import com.example.secondapp2n_0.Data.ParcelDataSource;
+import com.example.secondapp2n_0.Data.ParcelsRepository;
 import com.example.secondapp2n_0.R;
 
 public class FriendsParcelsFragment extends Fragment {
 
     private FriendsParcelsViewModel galleryViewModel;
+    private IParcelsRepository parcelsRepository;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        parcelsRepository= ParcelsRepository.getInstance();
         galleryViewModel = ViewModelProviders.of(this).get(FriendsParcelsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_gallery, container, false);
         final TextView textView = root.findViewById(R.id.text_gallery);
@@ -39,5 +44,9 @@ public class FriendsParcelsFragment extends Fragment {
             }
         });
         return root;
+    }
+    public void Delivery(View view)
+    {
+
     }
 }

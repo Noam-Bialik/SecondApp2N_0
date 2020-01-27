@@ -26,5 +26,6 @@
         android:text="startParcelsDataSource"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="0dp" />
+        tools:layout_editor_absoluteX="0dp"
+        android:onClick="Delivery"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
