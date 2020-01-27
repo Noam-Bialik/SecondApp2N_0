@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.secondapp2n_0.Entities.Enumes;
 import com.example.secondapp2n_0.Entities.FireParcel;
 import com.example.secondapp2n_0.Entities.Parcel;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -14,6 +15,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ParcelDataSource implements IParcelsDateSource {
 
@@ -23,9 +25,7 @@ public class ParcelDataSource implements IParcelsDateSource {
 
 
     private static ParcelDataSource instance = null;
-    private ParcelDataSource(){
-        reference.setValue("hi firebase,ParcelDataSource works ");
-    }
+    private ParcelDataSource(){ }
     public static IParcelsDateSource getInstance(){
         if(instance == null)
             instance = new ParcelDataSource();
@@ -106,7 +106,9 @@ public class ParcelDataSource implements IParcelsDateSource {
     }
 
     private boolean matchToOwner(String userName, Parcel parcel) {
-        if(userName == parcel.getToName())
+        if(parcel == null ||userName == null)
+            return false;
+        if(userName.equals( parcel.getToName()) && !(parcel.getParcelStatus().equals(Enumes.ParcelStatus.RECIVED)))
             return true;
         return false;
     }
@@ -115,6 +117,8 @@ public class ParcelDataSource implements IParcelsDateSource {
     @Override
     public boolean updateParcel(Parcel parcel) throws Exception {
         try{
+            if(parcel.getAvailableDeliveries()==null)
+                parcel.setAvailableDeliveries(new HashMap<String, Boolean>());
             parcelsRef.child(String.valueOf(parcel.getID())).setValue(new FireParcel(parcel));
             return true;
         }

@@ -9,6 +9,7 @@ import com.example.secondapp2n_0.Data.IParcelsDateSource.OwnerCallBacks;
 import com.example.secondapp2n_0.Utils.General;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ParcelsRepository implements IParcelsRepository {
@@ -18,7 +19,7 @@ public class ParcelsRepository implements IParcelsRepository {
     private static double Radius;
     private MutableLiveData<ArrayList<Parcel>>ownerParcels = new MutableLiveData<ArrayList<Parcel>>();
     private MutableLiveData<ArrayList<Parcel>>deliveryParcels = new MutableLiveData<ArrayList<Parcel>>();
-    private static String userName;
+    private static String userName ="nave";
 
 
 
@@ -38,6 +39,7 @@ public class ParcelsRepository implements IParcelsRepository {
                 ArrayList<Parcel> list = ownerParcels.getValue();
                 if(list == null)
                     list = new ArrayList<>();
+                list.add(parcel);
                 ownerParcels.setValue(list);
             }
 
@@ -71,6 +73,7 @@ public class ParcelsRepository implements IParcelsRepository {
                 ArrayList<Parcel> list = deliveryParcels.getValue();
                 if(list == null)
                     list = new ArrayList<>();
+                list.add(parcel);
                 deliveryParcels.setValue(list);
             }
 

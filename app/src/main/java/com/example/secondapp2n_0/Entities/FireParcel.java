@@ -5,6 +5,7 @@ import android.location.Location;
 import com.example.secondapp2n_0.Utils.Converters;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 
 public class FireParcel {
     private int ID;
@@ -22,6 +23,16 @@ public class FireParcel {
     private SimpleDateFormat reciviedDate;
     private String deliverName;
 
+    public HashMap<String, Boolean> getAvailableDeliveries() {
+        return availableDeliveries;
+    }
+
+    public void setAvailableDeliveries(HashMap<String, Boolean> availableDeliveries) {
+        this.availableDeliveries = availableDeliveries;
+    }
+
+    private HashMap<String,Boolean> availableDeliveries ;
+
 
     public FireParcel(Parcel parcel) {
         this.ID = parcel.getID();
@@ -38,6 +49,7 @@ public class FireParcel {
         this.sendDate = parcel.getSendDate();
         this.reciviedDate = parcel.getReciviedDate();
         this.deliverName = parcel.getDeliverName();
+        this.availableDeliveries = parcel.getAvailableDeliveries();
     }
 
     public FireParcel() {
@@ -51,7 +63,7 @@ public class FireParcel {
         toLocation.setLatitude(la);
     }
     public void setLo(Double lo){
-        toLocation.setLatitude(lo);
+        toLocation.setLongitude(lo);
     }
 
 

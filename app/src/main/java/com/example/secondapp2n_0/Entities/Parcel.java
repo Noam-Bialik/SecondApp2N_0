@@ -47,6 +47,8 @@ public class Parcel {
         this.toMail = parcel.getToMail();
         Converters a = new Converters();
 
+        this.availableDeliveries =parcel.getAvailableDeliveries();
+
         this.sendDate = a.dateFromDatabase( parcel.getSendDate());
         this.reciviedDate =a.dateFromDatabase( parcel.getReciviedDate());
         this.deliverName = parcel.getDeliverName();
