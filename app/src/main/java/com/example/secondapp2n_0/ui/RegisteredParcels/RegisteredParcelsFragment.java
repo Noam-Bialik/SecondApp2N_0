@@ -24,6 +24,7 @@ public class RegisteredParcelsFragment extends Fragment {
                 ViewModelProviders.of(this).get(RegisteredParcelsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         final TextView textView = root.findViewById(R.id.text_home);
+        int x=0;
         homeViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
