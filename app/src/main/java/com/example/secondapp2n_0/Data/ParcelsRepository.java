@@ -15,7 +15,7 @@ import java.util.List;
 public class ParcelsRepository implements IParcelsRepository {
 
     private static ParcelsRepository instance = null;
-    private IParcelsDateSource parcelsDateSource;
+    private IParcelsDateSource parcelsDataSource;
     private static double Radius;
     private MutableLiveData<ArrayList<Parcel>>ownerParcels = new MutableLiveData<ArrayList<Parcel>>();
     private MutableLiveData<ArrayList<Parcel>>deliveryParcels = new MutableLiveData<ArrayList<Parcel>>();
@@ -30,15 +30,24 @@ public class ParcelsRepository implements IParcelsRepository {
     }
 
     private ParcelsRepository(){
-        parcelsDateSource=ParcelDataSource.getInstance();
+        parcelsDataSource=ParcelDataSource.getInstance();
 
-        parcelsDateSource.notifyToRepository(userName,Radius,new OwnerCallBacks()
+        parcelsDataSource.notifyToRepository(userName,Radius,new OwnerCallBacks()
         {
             @Override
             public void parcelAdded(Parcel parcel) {
                 ArrayList<Parcel> list = ownerParcels.getValue();
                 if(list == null)
                     list = new ArrayList<>();
+                else
+                {
+                    for (Parcel parcel1:list) {
+                        if (parcel1.getID()==parcel.getID())
+                        {
+                            return;
+                        }
+                    }
+                }
                 list.add(parcel);
                 ownerParcels.setValue(list);
             }
@@ -106,6 +115,7 @@ public class ParcelsRepository implements IParcelsRepository {
 
     @Override
     public MutableLiveData<ArrayList<Parcel>> getAllParcelsForOwner() {
+
         return ownerParcels;
     }
 
@@ -116,6 +126,7 @@ public class ParcelsRepository implements IParcelsRepository {
 
     @Override
     public boolean setParcelFromDelivery(Parcel parcel) throws Exception {
+        parcelsDataSource=ParcelDataSource.getInstance();
         if (parcelsDataSource.updateParcel(parcel))
         {return true;}
         return false;
@@ -123,6 +134,7 @@ public class ParcelsRepository implements IParcelsRepository {
 
     @Override
     public boolean setParcelFromOwner(Parcel parcel) throws Exception {
+        parcelsDataSource=ParcelDataSource.getInstance();
         if (parcelsDataSource.updateParcel(parcel))
         {return true;}
         return false;

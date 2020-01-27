@@ -62,6 +62,8 @@ public class ParcelDataSource implements IParcelsDateSource {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 FireParcel fireParcel = dataSnapshot.getValue(FireParcel.class);
+                if(fireParcel.getAvailableDeliveries() == null)
+                    fireParcel.setAvailableDeliveries(new HashMap<String, Boolean>());
                 Parcel parcel = new Parcel(fireParcel);
                 if(matchToOwner(userName,parcel))
                     OwnerCallBacks.parcelAdded(parcel);
@@ -72,6 +74,8 @@ public class ParcelDataSource implements IParcelsDateSource {
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 FireParcel fireParcel = dataSnapshot.getValue(FireParcel.class);
+                if(fireParcel.getAvailableDeliveries() == null)
+                    fireParcel.setAvailableDeliveries(new HashMap<String, Boolean>());
                 Parcel parcel = new Parcel(fireParcel);
                 if(matchToOwner(userName,parcel))
                     OwnerCallBacks.parcelChanged(parcel);
@@ -82,6 +86,8 @@ public class ParcelDataSource implements IParcelsDateSource {
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 FireParcel fireParcel = dataSnapshot.getValue(FireParcel.class);
+                if(fireParcel.getAvailableDeliveries() == null)
+                    fireParcel.setAvailableDeliveries(new HashMap<String, Boolean>());
                 Parcel parcel = new Parcel(fireParcel);
                 if(matchToOwner(userName,parcel))
                     OwnerCallBacks.parcelRemoved(parcel);
