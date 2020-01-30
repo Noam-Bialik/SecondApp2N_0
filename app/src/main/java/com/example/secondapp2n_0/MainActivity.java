@@ -2,6 +2,9 @@ package com.example.secondapp2n_0;
 
 import android.os.Bundle;
 
+import com.example.secondapp2n_0.Entities.FireParcel;
+import com.example.secondapp2n_0.ui.FriendsParcels.FriendsParcelsFragment;
+import com.example.secondapp2n_0.ui.FriendsParcels.FriendsParcelsViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -24,6 +27,7 @@ import android.view.Menu;
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+    private String userName="nave";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +49,10 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+        Bundle bundle = new Bundle();
+        bundle.putString("userName", userName);
+        FriendsParcelsFragment fragobj = new FriendsParcelsFragment();
+        fragobj.setArguments(bundle);
     }
 
     @Override
