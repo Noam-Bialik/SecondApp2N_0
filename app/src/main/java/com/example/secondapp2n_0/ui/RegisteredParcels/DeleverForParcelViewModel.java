@@ -10,20 +10,16 @@ import com.example.secondapp2n_0.Entities.Parcel;
 
 import java.util.ArrayList;
 
-public class RegisteredParcelsViewModel extends ViewModel {
+public class DeleverForParcelViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
     private IParcelsRepository parcelsRepository;
-    public RegisteredParcelsViewModel() {
+    public DeleverForParcelViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is RegisteredParcels fragment");
         parcelsRepository= ParcelsRepository.getInstance();
         ParcelsRepository.setUser("nave");
         parcelsRepository.setRadiusAndUsername();
-    }
-
-    public LiveData<String> getText() {
-        return mText;
     }
 
 
@@ -36,6 +32,5 @@ public class RegisteredParcelsViewModel extends ViewModel {
     public MutableLiveData<ArrayList<Parcel>> getAllParcelsForOwner() {
         return parcelsRepository.getAllParcelsForOwner();
     }
-
 
 }

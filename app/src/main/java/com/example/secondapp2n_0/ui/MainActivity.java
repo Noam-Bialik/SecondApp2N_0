@@ -1,8 +1,9 @@
-package com.example.secondapp2n_0;
+package com.example.secondapp2n_0.ui;
 
 import android.os.Bundle;
 
 import com.example.secondapp2n_0.Entities.FireParcel;
+import com.example.secondapp2n_0.R;
 import com.example.secondapp2n_0.ui.FriendsParcels.FriendsParcelsFragment;
 import com.example.secondapp2n_0.ui.FriendsParcels.FriendsParcelsViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;

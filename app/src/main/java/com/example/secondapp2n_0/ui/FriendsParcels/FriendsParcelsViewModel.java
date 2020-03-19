@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.secondapp2n_0.Data.IParcelsRepository;
-import com.example.secondapp2n_0.Data.ParcelDataSource;
 import com.example.secondapp2n_0.Data.ParcelsRepository;
 import com.example.secondapp2n_0.Entities.Parcel;
 
@@ -20,6 +19,8 @@ public class FriendsParcelsViewModel extends ViewModel {
         mText = new MutableLiveData<>();
         mText.setValue("This is FriendsParcels fragment");
         parcelsRepository= ParcelsRepository.getInstance();
+        ParcelsRepository.setRad(100);
+        parcelsRepository.setRadiusAndUsername();
     }
 
     public LiveData<String> getText() {
@@ -28,6 +29,8 @@ public class FriendsParcelsViewModel extends ViewModel {
 
     public boolean setParcelFromDelivery(Parcel parcel) throws Exception {
         parcelsRepository= ParcelsRepository.getInstance();
+
+
         if (parcelsRepository.setParcelFromDelivery(parcel))
         {return true;}
         return false;
@@ -35,5 +38,13 @@ public class FriendsParcelsViewModel extends ViewModel {
     public MutableLiveData<ArrayList<Parcel>> getAllParcelsForDelivery() throws Exception {
         return parcelsRepository.getAllParcelsForDelivery();
     }
-
+    public static void setUser(String User) { ParcelsRepository.setUser(User); }
+    public static void setRad(double Rad)
+    {
+        ParcelsRepository.setRad(Rad);
+    }
+    public static String getUser() {return ParcelsRepository.getUser(); }
+    public static double getRead() {
+        return ParcelsRepository.getRad();
+    }
 }

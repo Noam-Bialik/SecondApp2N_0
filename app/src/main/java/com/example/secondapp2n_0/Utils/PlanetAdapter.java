@@ -26,46 +26,80 @@ import android.widget.TextView;
 
 import com.example.secondapp2n_0.Entities.Parcel;
 import com.example.secondapp2n_0.R;
+import com.example.secondapp2n_0.ui.FriendsParcels.FriendsParcelsViewModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class PlanetAdapter extends ArrayAdapter<Parcel> implements Filterable {
 
-	private ArrayList<String> parcels;
+	private List<Parcel> planetList;
 	private Context context;
 	private Filter planetFilter;
-	private ArrayList<String> origPlanetList;
-	
-	public PlanetAdapter(ArrayList<String> parcelList, Context ctx) {
-		super(ctx,R.layout.list_item);
-		//super(ctx, R.layout.list_item ,parcelList);
-		this.parcels = parcelList;
+	private List<Parcel> origPlanetList;
+	String filter;
+	String user= FriendsParcelsViewModel.getUser();
+
+	public PlanetAdapter(ArrayList<Parcel> planetList, Context ctx) {
+		super(ctx, R.layout.img_row_layout, planetList);
+		this.planetList = planetList;
 		this.context = ctx;
-		this.origPlanetList = parcelList;
+		this.origPlanetList = planetList;
 	}
 	
 	public int getCount() {
-		return parcels.size();
+		return planetList.size();
 	}
 
-	public String getItem1(int position) {
-		return parcels.get(position);
+	public Parcel getItem(int position) {
+		return planetList.get(position);
 	}
 
 	public long getItemId(int position) {
-		return parcels.get(position).hashCode();
+		return planetList.get(position).hashCode();
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View v = convertView;
+		
+		PlanetHolder holder = new PlanetHolder();
+		
+		// First let's verify the convertView is not null
+		if (convertView == null) {
+			// This a new view we inflate the new layout
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			v = inflater.inflate(R.layout.list_item, null);
-			return v;
+			v = inflater.inflate(R.layout.img_row_layout, null);
+			// Now we can fill the layout with the right values
+			TextView tv = (TextView) v.findViewById(R.id.name);
+			TextView status = (TextView) v.findViewById(R.id.Status);
+
+			
+			holder.planetNameView = tv;
+			holder.status = status;
+			v.setTag(holder);
+		}
+		else
+			holder = (PlanetHolder) v.getTag();
+
+		Parcel p = planetList.get(position);
+		String str=new String();
+		HashMap<String , Boolean> hashMap = p.getAvailableDeliveries();
+
+		if (hashMap.containsKey(user))
+			if (hashMap.get(user))
+				str = "messenger of:";
+			else str="requested to be a messenger of:";
+
+		holder.status.setText(str+" "+p.getToName());
+		holder.planetNameView.setText(p.getToName());
+		
+		
+		return v;
 	}
 
 	public void resetData() {
-		parcels = origPlanetList;
+		planetList = origPlanetList;
 	}
 	
 	
@@ -76,7 +110,7 @@ public class PlanetAdapter extends ArrayAdapter<Parcel> implements Filterable {
 	
 	private static class PlanetHolder {
 		public TextView planetNameView;
-		public TextView distView;
+		public TextView status;
 	}
 	
 
@@ -110,10 +144,10 @@ public class PlanetAdapter extends ArrayAdapter<Parcel> implements Filterable {
 			}
 			else {
 				// We perform filtering operation
-				ArrayList<String> nPlanetList = new ArrayList<String>();
+				List<Parcel> nPlanetList = new ArrayList<Parcel>();
 				
-				for (String p : parcels) {
-					if (p.toUpperCase().startsWith(constraint.toString().toUpperCase()))
+				for (Parcel p : planetList) {
+					if (p.getToName().toUpperCase().startsWith(constraint.toString().toUpperCase()))
 						nPlanetList.add(p);
 				}
 				
@@ -132,7 +166,7 @@ public class PlanetAdapter extends ArrayAdapter<Parcel> implements Filterable {
 			if (results.count == 0)
 				notifyDataSetInvalidated();
 			else {
-				parcels = (ArrayList<String>) results.values;
+				planetList = (List<Parcel>) results.values;
 				notifyDataSetChanged();
 			}
 			

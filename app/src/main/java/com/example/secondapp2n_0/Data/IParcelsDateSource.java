@@ -1,9 +1,9 @@
 package com.example.secondapp2n_0.Data;
 
+
 import com.example.secondapp2n_0.Entities.Parcel;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public interface IParcelsDateSource  {
 
@@ -26,11 +26,11 @@ public interface IParcelsDateSource  {
     ArrayList<Parcel> getAllParcelsAvailableInRadius(double radius) throws Exception;
 
     //5 B announced that he want to take the parcel
-    boolean showMeAsDeliveryForTheParcel(Parcel parcel,String userName)throws Exception;
+    boolean showMeAsDeliveryForTheParcel(Parcel parcel, String userName)throws Exception;
 
 
     //we use:
-    void notifyToRepository(String userName,double radius,final OwnerCallBacks OwnerCallBacks ,final DeliveryCallBacks DeliveryCallBacks);
+    void notifyToRepository(double radius, String userName, final OwnerCallBacks OwnerCallBacks, final DeliveryCallBacks DeliveryCallBacks);
 
 
     //listeners
@@ -50,5 +50,7 @@ public interface IParcelsDateSource  {
        update parcel to DataBase
         */
     boolean updateParcel(Parcel parcel) throws Exception;
-
+    boolean matchToOwner(String userName, Parcel parcel);
+    boolean matchToDelivery(double radius, Parcel parcel);
 }
+

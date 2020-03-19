@@ -1,11 +1,11 @@
 package com.example.secondapp2n_0.Data;
 
+
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.secondapp2n_0.Entities.Parcel;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public interface IParcelsRepository {
     IParcelsDateSource parcelsDataSource = null;
@@ -16,9 +16,10 @@ public interface IParcelsRepository {
      * */
 
     /*
-    * 1
-    * Get all As parcels.
-    * */
+     * 1
+     * Get all As parcels.
+     * */
+
     MutableLiveData<ArrayList<Parcel>> getAllParcelsForOwner();
     /*
      * 2
@@ -37,6 +38,6 @@ public interface IParcelsRepository {
     set parcel after changes from A
      */
     boolean setParcelFromOwner(Parcel parcel) throws Exception;
-
-
+    void setRadiusAndUsername();
 }
+

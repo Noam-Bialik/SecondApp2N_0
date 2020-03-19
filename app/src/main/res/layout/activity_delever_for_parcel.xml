@@ -1,0 +1,51 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:background="#FFFF00"
+    android:descendantFocusability="blocksDescendants"
+    >
+
+
+    <TextView android:id="@+id/Tital"
+        android:text="all All your packages, click and find out who wants to collect them"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        />
+    <TextView android:id="@+id/Details"
+        android:text=""
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textAlignment="center"
+        android:layout_gravity="center"
+        android:textSize="15dp"
+        />
+    <TextView android:id="@+id/T"
+        android:text="entre to confirrem delvery"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:layout_gravity="center"
+        android:textSize="30dp"
+        />
+        <ListView
+            android:id="@+id/checkable_list"
+            android:layout_width="fill_parent"
+            android:layout_height="190dp"
+            />
+    <Button
+        android:id="@+id/ParcelArrive"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#29b6f6"
+        android:text="ParcelArrive"
+        android:onClick="ParcelArrive" />
+
+</LinearLayout>

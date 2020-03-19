@@ -7,6 +7,7 @@ import android.location.Location;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.lang.Math;
 
 public class GPService {
 
@@ -67,5 +68,10 @@ public class GPService {
             object.setLongitude(lng);
             object.setLatitude(lat);
             return object;
+    }
+
+    public static double distance(Location location1,Location location2)
+    {
+        return Math.sqrt(Math.pow(location1.getLatitude()-location2.getLatitude(),2)+Math.pow(location1.getLongitude()-location2.getLongitude(),2));
     }
 }

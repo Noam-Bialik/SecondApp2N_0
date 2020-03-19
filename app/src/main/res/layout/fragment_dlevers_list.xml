@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.RegisteredParcels.DleversList">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:background="#FFFF00"
+        >
+
+
+        <TextView android:id="@+id/Tital"
+            android:text="all the parcel that you can deliver"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:textSize="30dp"
+            />
+
+
+
+
+        <EditText
+            android:id="@+id/editTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:maxLines="1"
+            android:textSize="19dp"
+            android:background="#FFFFFF"
+            android:hint="use this filter to find the to name that you want"
+            />
+
+        <ListView android:id="@+id/listView"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_weight="1"/>
+
+
+
+    </LinearLayout>
+
+</FrameLayout>

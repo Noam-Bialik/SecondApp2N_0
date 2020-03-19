@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class Converters {
+
     public SimpleDateFormat dateFromDatabase(String date) {
         return date == null ? null : new SimpleDateFormat(date);
     }
