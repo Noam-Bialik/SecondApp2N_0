@@ -25,14 +25,17 @@ public class AllWaitingViewModel extends ViewModel {
     private MutableLiveData<String> mText;
     private IParcelsRepository parcelsRepository;
     private Context context;
+    private static String userName="";
     //public MutableLiveData<ArrayList<Parcel>> parcels;
-    public AllWaitingViewModel(Context context1) {
+    public AllWaitingViewModel(Context context1,String userName1) {
         context=context1;
         mText = new MutableLiveData<>();
         mText.setValue("This is FriendsParcels fragment");
         parcelsRepository= ParcelsRepository.getInstance(context);
         ParcelsRepository.setRad(100);
         parcelsRepository.setRadiusAndUsername();
+        userName=userName1;
+
     }
 
     public LiveData<String> getText() {
@@ -86,7 +89,7 @@ public class AllWaitingViewModel extends ViewModel {
     {
         ParcelsRepository.setRad(Rad);
     }
-    public static String getUser() {return ParcelsRepository.getUser(); }
+    public static String getUser() {return userName; }
     public static double getRead() {
         return ParcelsRepository.getRad();
     }

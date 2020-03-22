@@ -19,13 +19,13 @@ public class WaitingViewModel extends ViewModel {
     private MutableLiveData<String> mText;
     private IParcelsRepository parcelsRepository;
     private Context context;
-    public WaitingViewModel(Context context1) {
+    public WaitingViewModel(Context context1,String userName) {
         //super((Application) context1);
         context=context1;
         mText = new MutableLiveData<>();
         mText.setValue("This is RegisteredParcels fragment");
         parcelsRepository= ParcelsRepository.getInstance(context);
-        ParcelsRepository.setUser("nave");
+        ParcelsRepository.setUser(userName);
         parcelsRepository.setRadiusAndUsername();
     }
 

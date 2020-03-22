@@ -3,6 +3,7 @@ package com.example.secondapp2n_0.ui;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -24,12 +25,22 @@ public class Login extends AppCompatActivity {
     EditText emailEditText,passwordEditText;
     Button registerBtn,loginBtn;
     FirebaseAuth firebaseAuth;
+    public static final String mypreference = "";
+    SharedPreferences sharedpreferences;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login2);
 
+
+        sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
+
+        if (sharedpreferences.getString("UserName", "")!=""&&sharedpreferences.getString("UserPassword", "")!="") {
+            switchToMain();
+        }
 
         emailEditText = (EditText)findViewById(R.id.edit_text_email);
         passwordEditText = (EditText)findViewById(R.id.edit_text_password);
@@ -42,7 +53,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final String email = emailEditText.getText().toString();
-                String password = passwordEditText.getText().toString();
+                final String password = passwordEditText.getText().toString();
 
                 if(TextUtils.isEmpty(email)){
                     Toast.makeText(getApplicationContext(),"Please fill in the required fields",Toast.LENGTH_SHORT).show();
@@ -61,10 +72,11 @@ public class Login extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()){
-                                    saveUser(email);
+                                    saveUser(email,password);
                                     switchToMain();
                                 }
                                 else{
+
                                     Toast.makeText(getApplicationContext(),"E-mail or password is wrong",Toast.LENGTH_SHORT).show();
                                 }
                             }
@@ -76,7 +88,8 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 logIn();
-            }});
+            }
+        });
 
 
 
@@ -84,21 +97,25 @@ public class Login extends AppCompatActivity {
     }
     void logIn(){
         final String email = emailEditText.getText().toString();
-        String password = passwordEditText.getText().toString();
+        final String password = passwordEditText.getText().toString();
 
         if(!email.isEmpty() && !password.isEmpty()){
             firebaseAuth.signInWithEmailAndPassword(email,password).addOnSuccessListener(this, new OnSuccessListener<AuthResult>() {
                 @Override
                 public void onSuccess(AuthResult authResult) {
-                    Toast.makeText(getApplicationContext(),"good",Toast.LENGTH_SHORT).show();
-                    saveUser(email);
+                    //Toast.makeText(getApplicationContext(),"good",Toast.LENGTH_SHORT).show();
+                    saveUser(email,password);
                     switchToMain();
 
                 }
             }).addOnFailureListener(this, new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getApplicationContext(),"bed",Toast.LENGTH_SHORT).show();
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                    editor.putString("UserName","");
+                    editor.putString("UserPassword", "");
+                    editor.commit();
+                    Toast.makeText(getApplicationContext(),"E-mail or password is wrong",Toast.LENGTH_SHORT).show();
 
                 }
             });
@@ -115,7 +132,7 @@ public class Login extends AppCompatActivity {
         switchToMain();
     }
 
-    private void saveUser(String userEmail){
+    private void saveUser1(String userEmail){
         SharedPreferences.Editor editor = getSharedPreferences("my_pref", MODE_PRIVATE).edit();
         editor.putString("email", userEmail);
         editor.apply();
@@ -126,6 +143,25 @@ public class Login extends AppCompatActivity {
         startActivity(intent);
     }
 
+    //@Override
+    protected void onStart()
+    {
+        super.onStart();
+        if (sharedpreferences.getString("UserName", "")!=""&&sharedpreferences.getString("UserPassword", "")!="") {
+            emailEditText.setText(sharedpreferences.getString("UserName", ""));
+            passwordEditText.setText(sharedpreferences.getString("UserPassword", ""));
+        }
+    }
+
+    public void saveUser(String userName, String userPassword) {
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString("UserName",userName);
+        editor.putString("UserPassword", userPassword);
+        editor.commit();
+        switchToMain();
 
 
+    }
 }
+
+

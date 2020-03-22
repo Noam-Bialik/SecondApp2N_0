@@ -103,6 +103,7 @@ public class AllWaitingFragment extends Fragment {
 package com.example.secondapp2n_0.ui.AllWaiting;
 
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -116,33 +117,42 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+
 import com.example.secondapp2n_0.Entities.Parcel;
 import com.example.secondapp2n_0.R;
 import com.example.secondapp2n_0.Utils.Converters;
 import com.example.secondapp2n_0.Utils.GPService;
 import com.example.secondapp2n_0.Utils.PlanetAdapter;
+import com.example.secondapp2n_0.ui.MainActivity;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+
+import static java.util.Collections.sort;
 
 public class AllWaitingFragment extends Fragment {
 
     ArrayList<String> allParcelsThat = new ArrayList<>();
     ArrayList<Parcel> planetsList1 = new ArrayList<>();
     PlanetAdapter aAdpt;
-    String user= AllWaitingViewModel.getUser();
+    //String user= AllWaitingViewModel.getUser();
     AllWaitingViewModel allWaitingViewModel;
     Converters converters = new Converters();
+    String userName="";
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //allWaitingViewModel = ViewModelProviders.of(this).get(AllWaitingViewModel.class);
-        allWaitingViewModel =new AllWaitingViewModel(getContext());
         final View root = inflater.inflate(R.layout.all_waiting, null);
         final ListView parcelsList = (ListView) root.findViewById(R.id.listView);
+//        String userName=getArguments().getString("UserName");
+        MainActivity activity=(MainActivity)getActivity();
+        userName=activity.getUserName();
+        fix();
 
+        allWaitingViewModel =new AllWaitingViewModel(getContext(),userName);
         aAdpt = new PlanetAdapter(planetsList1, getContext());
         parcelsList.setAdapter(aAdpt);
         parcelsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -170,8 +180,52 @@ public class AllWaitingFragment extends Fragment {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
             @Override
             public void afterTextChanged(Editable s) { }});
-        iniAdpter(parcelsList);
-     return root;
+        try {
+            //friendsParcelsViewModel.getAllParcelsForDelivery().removeObservers(this);
+            allWaitingViewModel.getAllParcelsForDelivery().observe(getViewLifecycleOwner(), new Observer<List<Parcel>>() {
+                @Override
+                public void onChanged(final List<Parcel> parcelList) {
+                    planetsList1.clear();
+                    planetsList1.addAll(parcelList);
+                   try { //sort();
+                        AsyncTaskRunner runner = new AsyncTaskRunner();
+                        runner.execute();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    AllWaitingFragment.this.aAdpt.notifyDataSetChanged();
+                    parcelsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            onParcelClick(parcelList.get(position),parcelsList);
+                        }
+                    });
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return root;
+    }
+    public void sort() throws Exception {
+
+        Parcel parcel;
+        Parcel parcel1;
+        double a=0,b=0;
+        for (int i = 0; i < planetsList1.size()-1; i++)
+            for (int j = 0; j < planetsList1.size() - i-1; j++) {
+                 parcel = planetsList1.get(i);
+                 parcel1 = planetsList1.get(i+1);
+                a=GPService.distance(parcel.getToLocation(),GPService.getLocationFromAddress(parcel.getWarehouseLocation(),getContext()));
+                b=GPService.distance(parcel1.getToLocation(),GPService.getLocationFromAddress(parcel1.getWarehouseLocation(),getContext()));
+                if (a>b) {
+                    // swap arr[j+1] and arr[i]
+                    planetsList1.set(i,parcel1);
+                    planetsList1.set(i+1,parcel);
+                }
+            }
+        //AllWaitingFragment.this.aAdpt.notifyDataSetChanged();
     }
 
     public void onParcelClick(final Parcel parcel, final ListView parcelsList) {
@@ -186,7 +240,6 @@ public class AllWaitingFragment extends Fragment {
                 "\nBreakable: " + parcel.getBreakable().toString() +
                 "\nWeight: " + parcel.getWeight().toString() +
                 "\nParcelStatus: " + parcel.getParcelStatus() +
-                "\nSendDate: " + parcel.getSendDate().format(cal.getTime()) +
                 "\nToLocation: " + GPService.getCompleteAddress(parcel.getToLocation(),getContext()) +
                 "\nTomail: " + parcel.getToMail() +
                 "\nToname: " + parcel.getToName() +
@@ -198,8 +251,8 @@ public class AllWaitingFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which)
             {
                 HashMap<String , Boolean> hashMap = parcel.getAvailableDeliveries();
-                if (!hashMap.containsKey(user)) {
-                    hashMap.put("nave", false);
+                if (!hashMap.containsKey(userName)) {
+                    hashMap.put(userName, false);
                     parcel.setAvailableDeliveries(hashMap);
 
                     try {
@@ -207,7 +260,7 @@ public class AllWaitingFragment extends Fragment {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    iniAdpter(parcelsList);
+                   // iniAdpter(parcelsList);
                 }
                 else
                 {
@@ -229,8 +282,8 @@ public class AllWaitingFragment extends Fragment {
         {
             public void onClick(DialogInterface dialog, int which) {
                 HashMap<String , Boolean> hashMap = parcel.getAvailableDeliveries();
-                if (hashMap.containsKey(user))
-                    if (hashMap.get(user))
+                if (hashMap.containsKey(userName))
+                    if (hashMap.get(userName))
                     {
                         AlertDialog Dialog = new AlertDialog.Builder(getContext()).create();
                         Dialog.setTitle("Alert");
@@ -244,14 +297,14 @@ public class AllWaitingFragment extends Fragment {
                         Dialog.show();
                     }
                     else {
-                        hashMap.remove("nave");
+                        hashMap.remove(userName);
                         parcel.setAvailableDeliveries(hashMap);
                         try {
                             allWaitingViewModel.setParcelFromDelivery(parcel);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        iniAdpter(parcelsList);
+                        //iniAdpter(parcelsList);
                         dialog.dismiss();
                     }
                 else dialog.dismiss();
@@ -260,28 +313,25 @@ public class AllWaitingFragment extends Fragment {
 
         alertDialog.show();
     }
-    public void iniAdpter(final ListView parcelsList)
+    public void fix()
     {
-        //ListView listView=((ListView)((View)inflater.inflate(R.layout.all_waiting, null)).findViewById(R.id.listView));
+     userName=userName.replace(".","-");
+    }
+    private class AsyncTaskRunner extends AsyncTask<Void, Void, Void> implements com.example.secondapp2n_0.ui.AllWaiting.AsyncTaskRunner {
 
-        try {
-            //friendsParcelsViewModel.getAllParcelsForDelivery().removeObservers(this);
-            allWaitingViewModel.getAllParcelsForDelivery().observe(getViewLifecycleOwner(), new Observer<List<Parcel>>() {
-                @Override
-                public void onChanged(final List<Parcel> parcelList) {
-                    planetsList1.clear();
-                    planetsList1.addAll(parcelList);
-                    AllWaitingFragment.this.aAdpt.notifyDataSetChanged();
-                    parcelsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            onParcelClick(parcelList.get(position),parcelsList);
-                        }
-                    });
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
+
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                sort();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+        @Override
+        protected void onPreExecute() {
         }
     }
 }

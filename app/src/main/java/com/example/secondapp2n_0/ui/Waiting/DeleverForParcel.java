@@ -41,7 +41,8 @@ public class DeleverForParcel extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delever_for_parcel);
-        deleverForParcelViewModel = ViewModelProviders.of(this).get(DeleverForParcelViewModel.class);
+        //deleverForParcelViewModel = ViewModelProviders.of(this).get(DeleverForParcelViewModel.class);
+        deleverForParcelViewModel=new DeleverForParcelViewModel(getApplicationContext());
         parcel=iniParcel();
         setDetails(parcel);
 

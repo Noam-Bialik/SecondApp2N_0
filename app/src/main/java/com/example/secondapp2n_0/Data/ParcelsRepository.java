@@ -20,7 +20,7 @@ public class ParcelsRepository implements IParcelsRepository {
 
     private static ParcelsRepository instance = null;
     private IParcelsDateSource parcelsDataSource;
-    static String user="נוה";
+    static String user="";
     static double rad=10;
     private MutableLiveData<ArrayList<Parcel>> ownerParcels = new MutableLiveData<ArrayList<Parcel>>();
     private MutableLiveData<ArrayList<Parcel>>deliveryParcels = new MutableLiveData<ArrayList<Parcel>>();
@@ -70,8 +70,11 @@ public class ParcelsRepository implements IParcelsRepository {
                                 }
                             }
                         }
-                        list.add(parcel);
-                        ownerParcels.setValue(list);
+                        if(parcelsDataSource.matchToOwner(user,parcel))
+                        {
+                            list.add(parcel);
+                            ownerParcels.setValue(list);
+                        }
                     }
 
                     @Override
@@ -120,13 +123,15 @@ public class ParcelsRepository implements IParcelsRepository {
                         else
                         {
                             for (Parcel parcel1:list) {
-                                if (parcel1.getID()==parcel.getID()||ownerTooFarFromDelivery(parcel))
+                                if (parcel1.getID()==parcel.getID())
                                 {
                                     return;
                                 }
                             }
                         }
-                        list.add(parcel);
+                        //ownerTooFarFromDelivery(parcel)
+                        if(true)
+                          list.add(parcel);
                         deliveryParcels.setValue(list);
                     }
 
@@ -156,7 +161,8 @@ public class ParcelsRepository implements IParcelsRepository {
                                     list.remove(parcel1);
                             }
                         }
-                        if(parcelsDataSource.matchToDelivery(rad,parcel)&&!ownerTooFarFromDelivery(parcel))
+                        //&&!ownerTooFarFromDelivery(parcel)
+                        if(parcelsDataSource.matchToDelivery(rad,parcel))
                         {
                             list.add(parcel);
                             deliveryParcels.setValue(list);

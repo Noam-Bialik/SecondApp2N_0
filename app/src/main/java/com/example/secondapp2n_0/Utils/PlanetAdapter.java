@@ -24,9 +24,12 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
+import com.example.secondapp2n_0.Data.ParcelsRepository;
 import com.example.secondapp2n_0.Entities.Parcel;
 import com.example.secondapp2n_0.R;
 import com.example.secondapp2n_0.ui.AllWaiting.AllWaitingViewModel;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,12 +43,14 @@ public class PlanetAdapter extends ArrayAdapter<Parcel> implements Filterable {
 	private List<Parcel> origPlanetList;
 	String filter;
 	String user= AllWaitingViewModel.getUser();
+	ParcelsRepository parcelsRepository;
 
 	public PlanetAdapter(ArrayList<Parcel> planetList, Context ctx) {
 		super(ctx, R.layout.img_row_layout, planetList);
 		this.planetList = planetList;
 		this.context = ctx;
 		this.origPlanetList = planetList;
+		parcelsRepository=ParcelsRepository.getInstance(context);
 	}
 	
 	public int getCount() {
@@ -73,28 +78,36 @@ public class PlanetAdapter extends ArrayAdapter<Parcel> implements Filterable {
 			// Now we can fill the layout with the right values
 			TextView tv = (TextView) v.findViewById(R.id.name);
 			TextView status = (TextView) v.findViewById(R.id.Status);
+			TextView distance = (TextView) v.findViewById(R.id.Distance);
 
-			
+
 			holder.planetNameView = tv;
 			holder.status = status;
+			holder.distance=distance;
 			v.setTag(holder);
 		}
 		else
 			holder = (PlanetHolder) v.getTag();
 
 		Parcel p = planetList.get(position);
-		String str=new String();
+		String str="you want delever my parcel ?";
 		HashMap<String , Boolean> hashMap = p.getAvailableDeliveries();
 
 		if (hashMap.containsKey(user))
 			if (hashMap.get(user))
-				str = "messenger of:";
-			else str="requested to be a messenger of:";
+				str = "messenger of:"+" "+p.getToName();
+			else str="requested to be a messenger of:"+" "+p.getToName();
 
-		holder.status.setText(str+" "+p.getToName());
+		holder.status.setText(str);
 		holder.planetNameView.setText(p.getToName());
-		
-		
+		try {
+			int a= (int) GPService.distance(p.getToLocation(),GPService.getLocationFromAddress(p.getWarehouseLocation(),getContext()));
+			holder.distance.setText(a+" KM");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+
 		return v;
 	}
 
@@ -111,6 +124,7 @@ public class PlanetAdapter extends ArrayAdapter<Parcel> implements Filterable {
 	private static class PlanetHolder {
 		public TextView planetNameView;
 		public TextView status;
+		public TextView distance;
 	}
 	
 

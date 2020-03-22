@@ -125,6 +125,8 @@ public class ParcelDataSource implements IParcelsDateSource {
         }
         if(availableDeliveries == null)
             return true;
+        if(parcel.getParcelStatus().toString()!="WAITING")
+            return false;
         /*for(Boolean val :availableDeliveries.values() ){
             if(val == true)
                 return false;
@@ -153,7 +155,7 @@ public class ParcelDataSource implements IParcelsDateSource {
     public boolean matchToOwner(String userName, Parcel parcel) {
         if(parcel == null ||userName == null)
             return false;
-        if(userName.equals( parcel.getToName()) && parcel.getParcelStatus().equals(Enumes.ParcelStatus.WAITING))
+        if(userName.equals( parcel.getToMail()) && parcel.getParcelStatus().equals(Enumes.ParcelStatus.WAITING))
             return true;
         return false;
     }

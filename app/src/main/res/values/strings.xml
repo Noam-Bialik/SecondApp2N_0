@@ -6,7 +6,10 @@
     <string name="nav_header_subtitle">Choose action</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-
+<string name="Welcem">Welcome \n
+If you are already subscribed to Singurim enter the email and click: Login \n
+If you have not yet earned the honor, click Create New User and enter your email account
+        </string>
     <string name="WAITING">your packages in the warehouse</string>
     <string name="AllWAITING">All packages in the warehouse</string>
     <string name="RECIVED">your package that recived</string>

@@ -3,6 +3,7 @@ package com.example.secondapp2n_0.ui;
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,6 +13,8 @@ import com.example.secondapp2n_0.R;
 import com.example.secondapp2n_0.ui.AllWaiting.AllWaitingFragment;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -34,21 +37,25 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-    private String userName="nave";
 
     private ArrayList permissionsToRequest;
     private ArrayList permissionsRejected = new ArrayList();
     private ArrayList permissions = new ArrayList();
-
+    private String userName;
     private final static int ALL_PERMISSIONS_RESULT = 101;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);//akdfasf
         getPremForGPS();
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("", 0); // 0 - for private mode
+        userName=pref.getString("UserName","nave");
         startService(new Intent(getBaseContext(), DriverService.class));
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitleTextAppearance(this, R.style.AppTheme);
@@ -58,6 +65,13 @@ public class MainActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
+        Bundle bundle = new Bundle();
+        bundle.putString("userName", userName);
+        AllWaitingFragment fragobj = new AllWaitingFragment();
+        fragobj.setArguments(bundle);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_ALLWAITING,R.id.nav_WAITING,R.id.nav_WAITINGBEFORTAKING,R.id.nav_ONWAY,R.id.nav_RECIVED)
                 .setDrawerLayout(drawer)
@@ -66,10 +80,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        Bundle bundle = new Bundle();
-        bundle.putString("userName", userName);
-        AllWaitingFragment fragobj = new AllWaitingFragment();
-        fragobj.setArguments(bundle);
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -173,6 +184,10 @@ public class MainActivity extends AppCompatActivity {
                 .create()
                 .show();
     }
+     public String getUserName()
+     {
+        return  userName;
+     }
 
 }
 

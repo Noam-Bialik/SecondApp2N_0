@@ -17,6 +17,7 @@ import com.example.secondapp2n_0.Entities.Parcel;
 import com.example.secondapp2n_0.R;
 import com.example.secondapp2n_0.Utils.Converters;
 import com.example.secondapp2n_0.Utils.ItemArrayAdapter;
+import com.example.secondapp2n_0.ui.MainActivity;
 
 import java.util.ArrayList;
 
@@ -28,7 +29,8 @@ public class WaitingFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //registeredParcelsViewModel=ViewModelProviders.of(this).get(WaitingViewModel.class);
-        waitingViewModel=new WaitingViewModel(getContext());
+        MainActivity activity=(MainActivity)getActivity();
+        waitingViewModel=new WaitingViewModel(getContext(),activity.getUserName());
         final View root = inflater.inflate(R.layout.waiting, null);
 
         final ArrayList<String> allParcelsThat = new ArrayList<String>();
