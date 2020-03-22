@@ -5,13 +5,22 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/menu_home" />
+            android:id="@+id/nav_ALLWAITING"
+            android:title="@string/AllWAITING" />
+
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/menu_gallery" />
+            android:id="@+id/nav_WAITING"
+            android:title="@string/WAITING" />
+        <item
+            android:id="@+id/nav_WAITINGBEFORTAKING"
+            android:title="@string/WAITINGBEFORTAKING" />
+        <item
+            android:id="@+id/nav_ONWAY"
+            android:title="@string/ONWAY" />
+        <item
+            android:id="@+id/nav_RECIVED"
+            android:title="@string/RECIVED" />
+
 
     </group>
 <!--

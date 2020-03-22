@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:background="#FFFF00"
+    android:background="@color/colorBackground"
     android:descendantFocusability="blocksDescendants"
     >
 
@@ -44,7 +44,7 @@
         android:id="@+id/ParcelArrive"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#29b6f6"
+        android:background="@color/colorButton"
         android:text="ParcelArrive"
         android:onClick="ParcelArrive" />
 

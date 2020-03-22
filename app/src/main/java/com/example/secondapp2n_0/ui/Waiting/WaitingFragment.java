@@ -1,5 +1,5 @@
 
-package com.example.secondapp2n_0.ui.RegisteredParcels;
+package com.example.secondapp2n_0.ui.Waiting;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,33 +13,27 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.example.secondapp2n_0.Entities.Enumes;
 import com.example.secondapp2n_0.Entities.Parcel;
 import com.example.secondapp2n_0.R;
 import com.example.secondapp2n_0.Utils.Converters;
-import com.example.secondapp2n_0.Utils.DeleverAdapter;
 import com.example.secondapp2n_0.Utils.ItemArrayAdapter;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-public class RegisteredParcelsFragment extends Fragment {
+public class WaitingFragment extends Fragment {
 
-    RegisteredParcelsViewModel registeredParcelsViewModel;
+    WaitingViewModel waitingViewModel;
     Converters converters;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        registeredParcelsViewModel=ViewModelProviders.of(this).get(RegisteredParcelsViewModel.class);
-        final View root = inflater.inflate(R.layout.history_parcels_activity, null);
+        //registeredParcelsViewModel=ViewModelProviders.of(this).get(WaitingViewModel.class);
+        waitingViewModel=new WaitingViewModel(getContext());
+        final View root = inflater.inflate(R.layout.waiting, null);
 
         final ArrayList<String> allParcelsThat = new ArrayList<String>();
         converters = new Converters();
-        registeredParcelsViewModel.getAllParcelsForOwner().observe(getViewLifecycleOwner(), new Observer<ArrayList<Parcel>>() {
+        waitingViewModel.getAllParcelsForOwner().observe(getViewLifecycleOwner(), new Observer<ArrayList<Parcel>>() {
             @Override
             public void onChanged(final ArrayList<Parcel> parcels) {
                 allParcelsThat.clear();

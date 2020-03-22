@@ -1,7 +1,7 @@
 /*
-public class FriendsParcelsFragment extends Fragment {
+public class AllWaitingFragment extends Fragment {
 
-    private FriendsParcelsViewModel friendsParcelsViewModel;
+    private RecivedViewModel friendsParcelsViewModel;
     ArrayList<String> allParcelThat = new ArrayList<String>();
     PlanetAdapter aAdpt;
     Converters converters;
@@ -11,8 +11,8 @@ public class FriendsParcelsFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        friendsParcelsViewModel = ViewModelProviders.of(this).get(FriendsParcelsViewModel.class);
-        final View root = inflater.inflate(R.layout.parcels_list_delivery, container, false);
+        friendsParcelsViewModel = ViewModelProviders.of(this).get(RecivedViewModel.class);
+        final View root = inflater.inflate(R.layout.all_waiting, container, false);
         try {
             friendsParcelsViewModel.getAllParcelsForDelivery().observe(getViewLifecycleOwner(), new Observer<ArrayList<Parcel>>() {
                 @Override
@@ -20,7 +20,7 @@ public class FriendsParcelsFragment extends Fragment {
                     planetsList1.clear();
                     planetsList1.addAll(parcels);
 
-                    FriendsParcelsFragment.this.aAdpt.notifyDataSetChanged();
+                    AllWaitingFragment.this.aAdpt.notifyDataSetChanged();
                     ((ListView) root.findViewById(R.id.listView)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -100,7 +100,7 @@ public class FriendsParcelsFragment extends Fragment {
 }
 */
 
-package com.example.secondapp2n_0.ui.FriendsParcels;
+package com.example.secondapp2n_0.ui.AllWaiting;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -127,20 +127,20 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-public class FriendsParcelsFragment extends Fragment {
+public class AllWaitingFragment extends Fragment {
 
     ArrayList<String> allParcelsThat = new ArrayList<>();
     ArrayList<Parcel> planetsList1 = new ArrayList<>();
     PlanetAdapter aAdpt;
-    String user=FriendsParcelsViewModel.getUser();
-    FriendsParcelsViewModel friendsParcelsViewModel;
+    String user= AllWaitingViewModel.getUser();
+    AllWaitingViewModel allWaitingViewModel;
     Converters converters = new Converters();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        friendsParcelsViewModel = ViewModelProviders.of(this).get(FriendsParcelsViewModel.class);
-
-        final View root = inflater.inflate(R.layout.parcels_list_delivery, null);
+        //allWaitingViewModel = ViewModelProviders.of(this).get(AllWaitingViewModel.class);
+        allWaitingViewModel =new AllWaitingViewModel(getContext());
+        final View root = inflater.inflate(R.layout.all_waiting, null);
         final ListView parcelsList = (ListView) root.findViewById(R.id.listView);
 
         aAdpt = new PlanetAdapter(planetsList1, getContext());
@@ -203,7 +203,7 @@ public class FriendsParcelsFragment extends Fragment {
                     parcel.setAvailableDeliveries(hashMap);
 
                     try {
-                        friendsParcelsViewModel.setParcelFromDelivery(parcel);
+                        allWaitingViewModel.setParcelFromDelivery(parcel);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -247,7 +247,7 @@ public class FriendsParcelsFragment extends Fragment {
                         hashMap.remove("nave");
                         parcel.setAvailableDeliveries(hashMap);
                         try {
-                            friendsParcelsViewModel.setParcelFromDelivery(parcel);
+                            allWaitingViewModel.setParcelFromDelivery(parcel);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -262,16 +262,16 @@ public class FriendsParcelsFragment extends Fragment {
     }
     public void iniAdpter(final ListView parcelsList)
     {
-        //ListView listView=((ListView)((View)inflater.inflate(R.layout.parcels_list_delivery, null)).findViewById(R.id.listView));
+        //ListView listView=((ListView)((View)inflater.inflate(R.layout.all_waiting, null)).findViewById(R.id.listView));
 
         try {
             //friendsParcelsViewModel.getAllParcelsForDelivery().removeObservers(this);
-            friendsParcelsViewModel.getAllParcelsForDelivery().observe(getViewLifecycleOwner(), new Observer<List<Parcel>>() {
+            allWaitingViewModel.getAllParcelsForDelivery().observe(getViewLifecycleOwner(), new Observer<List<Parcel>>() {
                 @Override
                 public void onChanged(final List<Parcel> parcelList) {
                     planetsList1.clear();
                     planetsList1.addAll(parcelList);
-                    FriendsParcelsFragment.this.aAdpt.notifyDataSetChanged();
+                    AllWaitingFragment.this.aAdpt.notifyDataSetChanged();
                     parcelsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

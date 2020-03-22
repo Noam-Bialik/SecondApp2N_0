@@ -1,6 +1,10 @@
-package com.example.secondapp2n_0.ui.RegisteredParcels;
+package com.example.secondapp2n_0.ui.Waiting;
 
-import androidx.lifecycle.LiveData;
+import android.app.Application;
+import android.content.Context;
+
+import androidx.constraintlayout.solver.Cache;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -10,25 +14,24 @@ import com.example.secondapp2n_0.Entities.Parcel;
 
 import java.util.ArrayList;
 
-public class RegisteredParcelsViewModel extends ViewModel {
+public class DeleverForParcelViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
     private IParcelsRepository parcelsRepository;
-    public RegisteredParcelsViewModel() {
+    private Context context;
+    public DeleverForParcelViewModel(Context context1) {
+      //  super((Application) context1);
+        context=context1;
         mText = new MutableLiveData<>();
         mText.setValue("This is RegisteredParcels fragment");
-        parcelsRepository= ParcelsRepository.getInstance();
+        parcelsRepository= ParcelsRepository.getInstance(context);
         ParcelsRepository.setUser("nave");
         parcelsRepository.setRadiusAndUsername();
     }
 
-    public LiveData<String> getText() {
-        return mText;
-    }
-
 
     public boolean setParcelFromOwner(Parcel parcel) throws Exception {
-        parcelsRepository= ParcelsRepository.getInstance();
+        parcelsRepository= ParcelsRepository.getInstance(context);
         if (parcelsRepository.setParcelFromOwner(parcel))
         {return true;}
         return false;
@@ -36,6 +39,5 @@ public class RegisteredParcelsViewModel extends ViewModel {
     public MutableLiveData<ArrayList<Parcel>> getAllParcelsForOwner() {
         return parcelsRepository.getAllParcelsForOwner();
     }
-
 
 }

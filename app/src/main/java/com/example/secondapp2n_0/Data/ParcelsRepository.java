@@ -2,10 +2,15 @@ package com.example.secondapp2n_0.Data;
 
 
 
+import android.content.Context;
+import android.location.Location;
+
 import androidx.lifecycle.MutableLiveData;
 import com.example.secondapp2n_0.Data.IParcelsDateSource.OwnerCallBacks;
 import com.example.secondapp2n_0.Entities.Parcel;
 import com.example.secondapp2n_0.Data.IParcelsDateSource.DeliveryCallBacks;
+import com.example.secondapp2n_0.Utils.GPService;
+import com.example.secondapp2n_0.Utils.LocationTrack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +24,16 @@ public class ParcelsRepository implements IParcelsRepository {
     static double rad=10;
     private MutableLiveData<ArrayList<Parcel>> ownerParcels = new MutableLiveData<ArrayList<Parcel>>();
     private MutableLiveData<ArrayList<Parcel>>deliveryParcels = new MutableLiveData<ArrayList<Parcel>>();
+    private static Context context;
 
 
     //Start with a new radius and userName.
-    public static ParcelsRepository getInstance(){
+    public static ParcelsRepository getInstance(Context context1){
         if(instance == null)
+        {
             instance = new ParcelsRepository();
+            context= context1;
+        }
 
         return instance;
     }
@@ -111,7 +120,7 @@ public class ParcelsRepository implements IParcelsRepository {
                         else
                         {
                             for (Parcel parcel1:list) {
-                                if (parcel1.getID()==parcel.getID())
+                                if (parcel1.getID()==parcel.getID()||ownerTooFarFromDelivery(parcel))
                                 {
                                     return;
                                 }
@@ -147,7 +156,7 @@ public class ParcelsRepository implements IParcelsRepository {
                                     list.remove(parcel1);
                             }
                         }
-                        if(parcelsDataSource.matchToDelivery(rad,parcel))
+                        if(parcelsDataSource.matchToDelivery(rad,parcel)&&!ownerTooFarFromDelivery(parcel))
                         {
                             list.add(parcel);
                             deliveryParcels.setValue(list);
@@ -185,6 +194,28 @@ public class ParcelsRepository implements IParcelsRepository {
         if (parcelsDataSource.updateParcel(parcel))
         {return true;}
         return false;
+    }
+
+    private boolean ownerTooFarFromDelivery(Parcel parcel) {
+        Location location=new Location("");
+        try {
+            location= GPService.getLocationFromAddress(parcel.getWarehouseLocation(),context);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Location location1=myLocation();
+        double b=GPService.distance(location1,location)+GPService.distance(location,parcel.getToLocation());
+        return b>100;
+    }
+
+    private Location myLocation() {
+        LocationTrack locationTrack;
+        Location location=new Location("");
+        locationTrack = new LocationTrack(context);
+        location.setLatitude(locationTrack.getLatitude());
+        location.setLongitude(locationTrack.getLongitude());
+        locationTrack.stopListener();
+        return location;
     }
 
 }

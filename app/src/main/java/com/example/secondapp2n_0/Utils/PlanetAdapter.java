@@ -26,7 +26,7 @@ import android.widget.TextView;
 
 import com.example.secondapp2n_0.Entities.Parcel;
 import com.example.secondapp2n_0.R;
-import com.example.secondapp2n_0.ui.FriendsParcels.FriendsParcelsViewModel;
+import com.example.secondapp2n_0.ui.AllWaiting.AllWaitingViewModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +39,7 @@ public class PlanetAdapter extends ArrayAdapter<Parcel> implements Filterable {
 	private Filter planetFilter;
 	private List<Parcel> origPlanetList;
 	String filter;
-	String user= FriendsParcelsViewModel.getUser();
+	String user= AllWaitingViewModel.getUser();
 
 	public PlanetAdapter(ArrayList<Parcel> planetList, Context ctx) {
 		super(ctx, R.layout.img_row_layout, planetList);

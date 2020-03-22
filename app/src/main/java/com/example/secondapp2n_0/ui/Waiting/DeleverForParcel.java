@@ -1,4 +1,4 @@
-package com.example.secondapp2n_0.ui.RegisteredParcels;
+package com.example.secondapp2n_0.ui.Waiting;
 
 import android.content.Context;
 import android.os.Build;
@@ -16,7 +16,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import com.example.secondapp2n_0.Entities.Enumes;

@@ -1,11 +1,15 @@
 package com.example.secondapp2n_0.Data;
 
+import android.content.Context;
+import android.location.Location;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.secondapp2n_0.Entities.Enumes;
 import com.example.secondapp2n_0.Entities.FireParcel;
 import com.example.secondapp2n_0.Entities.Parcel;
+import com.example.secondapp2n_0.Utils.GPService;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -22,15 +26,18 @@ import java.util.HashMap;
 public class ParcelDataSource implements IParcelsDateSource {
 
 
+    private static Context context;
     private DatabaseReference parcelsRef = FirebaseDatabase.getInstance().getReference("Parcels");
     private DatabaseReference reference = FirebaseDatabase.getInstance().getReference("exex");
 
-
     private static ParcelDataSource instance = null;
     private ParcelDataSource(){ }
+
     public static IParcelsDateSource getInstance(){
-        if(instance == null)
+        if(instance == null) {
             instance = new ParcelDataSource();
+            //context= context1;
+        }
         return instance;
     }
 
@@ -110,8 +117,12 @@ public class ParcelDataSource implements IParcelsDateSource {
 
     public boolean matchToDelivery(double radius, Parcel parcel) {
         HashMap<String, Boolean> availableDeliveries = parcel.getAvailableDeliveries();
-        if(ownerTooFarFromDelivery(radius,parcel))
-            return false;
+        try {
+            if(ownerTooFarFromDelivery(radius,parcel))
+                return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if(availableDeliveries == null)
             return true;
         /*for(Boolean val :availableDeliveries.values() ){
@@ -128,9 +139,15 @@ public class ParcelDataSource implements IParcelsDateSource {
      * @param parcel
      * @return
      */
-    private boolean ownerTooFarFromDelivery(double radius, Parcel parcel) {
-        return false;
-        /////////////////////////////////////////
+    private boolean ownerTooFarFromDelivery(double radius, Parcel parcel) throws Exception {
+        //Location location=GPService.getLocationFromAddress(parcel.getWarehouseLocation(),context);
+        //return  radius>GPService.distance(myLocation(),location)+GPService.distance(location,parcel.getToLocation());
+          return false;
+
+    }
+    private Location myLocation()
+    {
+        return new Location("");
     }
 
     public boolean matchToOwner(String userName, Parcel parcel) {
@@ -155,8 +172,4 @@ public class ParcelDataSource implements IParcelsDateSource {
         }
         return true;
     }
-
-
-
-
 }
